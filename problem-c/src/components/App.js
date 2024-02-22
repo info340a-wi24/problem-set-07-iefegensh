@@ -5,6 +5,21 @@ import TeamSelectForm from './TeamSelectForm';
 function App(props) {
 
   //Your work goes here
+  const [selectedTeam, setSelectedTeam] = useState('');
+  const [includeRunnerUps, setIncludeRunnerUps] = useState(false);
+  const [displayedData, setDisplayedData] = useState(props.gameData);
+
+  const handleApplyFilter = (teamName, includeRunnerUps) => {
+    setSelectedTeam(teamName);
+    setIncludeRunnerUps(includeRunnerUps);
+
+    const newFilteredData = props.gameData.filter(game => {
+      return (teamName === '' || game.winner === teamName || (includeRunnerUps && game.runner_up === teamName));
+    });
+
+    setDisplayedData(newFilteredData);
+  };
+
 
   //get sorted list of unique teamNames. reduce array of objects into array of strings, 
   //convert to Set to get uniques, spread back into array, and sort 
@@ -19,8 +34,17 @@ function App(props) {
       </header>
     
       <main>
-        <TeamSelectForm teamOptions={uniqueTeamNames} />
-        <GameDataTable data={props.gameData} />
+        <TeamSelectForm
+          selectedTeam={selectedTeam}
+          includeRunnerUp={includeRunnerUps}
+          teamOptions={uniqueTeamNames}
+          applyFilter={handleApplyFilter}
+        />
+        <GameDataTable
+          data={displayedData}
+          selectedTeam={selectedTeam}
+          includeRunnerUp={includeRunnerUps}
+        />
       </main>
 
       <footer>

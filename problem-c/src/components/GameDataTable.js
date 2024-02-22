@@ -7,19 +7,17 @@ export default function GameDataTable(props) {
   const [sortByCriteria, updateSort] = useState(null);
   const [isAsc, setIsAscending] = useState(null);
 
-  const shouldSortData = sortByCriteria !== null;
+ 
   let sortedData;
-  if (shouldSortData) {
+  if (sortByCriteria) {
     sortedData = _.sortBy(props.data, sortByCriteria);
+    // If the sorting should be in descending order, reverse the data
     if (!isAsc) {
       sortedData = _.reverse(sortedData);
     }
   } else {
+    // If there is no sorting criteria, use the original data
     sortedData = props.data;
-  }
-
-  if (sortByCriteria && !isAsc) {
-    sortedData().reverse();
   }
 
   const handleClick = (e) => {
